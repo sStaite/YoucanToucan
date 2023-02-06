@@ -1,3 +1,5 @@
+import { TextButton } from 'button';
+
 /**************************************************************************************/
 
 var config = {
@@ -26,36 +28,39 @@ function preload ()
 {
     this.load.image('zero', 'assets/zero.png');
     this.load.image('one', 'assets/one.png');
+    this.load.image('zero_hover', 'assets/zero_hover.png');
+    this.load.image('one_hover', 'assets/one_hover.png');
     initialise_markov_array();
 }
 
 function create ()
 {
-    var zero_sprite = this.add.sprite(40, 100, 'zero').setInteractive();
+    // Objects for zero and one
+    var zero_sprite = this.add.sprite(40, 120, 'zero').setInteractive();
     var one_sprite = this.add.sprite(40, 40, 'one').setInteractive();
-
-    var user_text = this.add.text(100, 60, '_', { 
+  
+    // Text objects
+    var user_text = this.add.text(100, 70, '_', { 
         fontFamily: 'andale mono', 
         fontSize: '20px'
     });
-
-    var comp_text = this.add.text(100, 160, '_', { 
+    var comp_text = this.add.text(100, 200, '_', { 
         fontFamily: 'andale mono', 
         fontSize: '20px'
     });
-
     var player_win_percent = this.add.text(500, 260, '_', { 
         fontFamily: 'andale mono', 
         fontSize: '60px'
     });
-
     var user_guesses = this.add.text(100, 260, '_', { 
         fontFamily: 'andale mono', 
         fontSize: '60px'
     });
 
+    zero_sprite.on('pointerover', function (pointer) {
+        // make a button its own class
+    });
     zero_sprite.on('pointerdown', function (pointer) {
-        // some sort of markov array update here
         make_guess();
         update_markov_array();
 
@@ -67,8 +72,8 @@ function create ()
         comp_text.setText(comp_nums.toString());
         user_guesses.setText(user_nums.length);
         player_win_percent.setText(get_win_percent())
-
     });
+
 
     one_sprite.on('pointerdown', function (pointer) {
         // some sort of markov array update here
