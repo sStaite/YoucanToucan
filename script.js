@@ -1,4 +1,3 @@
-import { TextButton } from 'button';
 
 /**************************************************************************************/
 
@@ -35,10 +34,10 @@ function preload ()
 
 function create ()
 {
-    // Objects for zero and one
-    var zero_sprite = this.add.sprite(40, 120, 'zero').setInteractive();
-    var one_sprite = this.add.sprite(40, 40, 'one').setInteractive();
-  
+    // Buttons for zero and one
+    var zero_sprite = this.add.image(40, 40, 'zero').setInteractive();
+    var one_sprite = this.add.image(40, 120, 'one').setInteractive();
+    
     // Text objects
     var user_text = this.add.text(100, 70, '_', { 
         fontFamily: 'andale mono', 
@@ -57,10 +56,13 @@ function create ()
         fontSize: '60px'
     });
 
-    zero_sprite.on('pointerover', function (pointer) {
-        // make a button its own class
-    });
+
+
+    // Zero image logic
     zero_sprite.on('pointerdown', function (pointer) {
+        zero_sprite.setTexture('zero');
+        zero_sprite.setTint(Phaser.Display.Color.GetColor(120, 120, 120));
+
         make_guess();
         update_markov_array();
 
@@ -74,9 +76,26 @@ function create ()
         player_win_percent.setText(get_win_percent())
     });
 
+    zero_sprite.on('pointerup', function (pointer) {
+        zero_sprite.setTexture('zero_hover');
+        zero_sprite.clearTint();
+    });
 
+    zero_sprite.on('pointerover', function (pointer) {
+        zero_sprite.setTexture('zero_hover');
+    });
+
+    zero_sprite.on('pointerout', function (pointer) {
+        zero_sprite.setTexture('zero');
+    });
+
+
+
+    // One image logic
     one_sprite.on('pointerdown', function (pointer) {
-        // some sort of markov array update here
+        one_sprite.setTexture('one');
+        one_sprite.setTint(Phaser.Display.Color.GetColor(120, 120, 120));
+
         make_guess();
         update_markov_array();
 
@@ -87,15 +106,26 @@ function create ()
         user_text.setText(user_nums.toString());
         comp_text.setText(comp_nums.toString());
         user_guesses.setText(user_nums.length); 
-        player_win_percent.setText(get_win_percent())
+        player_win_percent.setText(get_win_percent());
+    });
 
+    one_sprite.on('pointerup', function (pointer) {
+        one_sprite.setTexture('one_hover');
+        one_sprite.clearTint();
+    });
 
+    one_sprite.on('pointerover', function (pointer) {
+        one_sprite.setTexture('one_hover');
+    });
+
+    one_sprite.on('pointerout', function (pointer) {
+        one_sprite.setTexture('one');
     });
 }
 
 function update ()
 {   
-
+    
 }
 
 /**************************************************************************************/
