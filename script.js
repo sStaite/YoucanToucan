@@ -3,9 +3,9 @@
 
 var config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    backgroundColor: '#4478aa',
+    width: 1200,
+    height: 900,
+    backgroundColor: '#3b5258',
     scene: {
         preload: preload,
         create: create,
@@ -25,39 +25,35 @@ const comp_nums = new Array()
 
 function preload ()
 {
-    this.load.image('zero', 'assets/zero.png');
-    this.load.image('one', 'assets/one.png');
-    this.load.image('zero_hover', 'assets/zero_hover.png');
-    this.load.image('one_hover', 'assets/one_hover.png');
+    this.load.spritesheet('start', 'assets/Start_Textbox.png', { frameWidth: 327, frameHeight: 200 });
+
     initialise_markov_array();
+    gameState = 0;
 }
 
 function create ()
 {
+    // Start button
+    var start_button = this.add.sprite(600, 450, 'start', 0).setInteractive();
+
+    start_button.on('pointerover', function () {
+        this.setFrame(0);
+    });
+    start_button.on('pointerdown', function () {
+        this.setFrame(1);
+    });
+    start_button.on('pointerup', function () {
+        this.setFrame(0);
+        gameState = 1;
+    });
+    start_button.on('pointerout', function () {
+        this.setFrame(0);
+    });
+
+
     // Buttons for zero and one
-    var zero_sprite = this.add.image(40, 40, 'zero').setInteractive();
-    var one_sprite = this.add.image(40, 120, 'one').setInteractive();
-    
-    // Text objects
-    var user_text = this.add.text(100, 70, '_', { 
-        fontFamily: 'andale mono', 
-        fontSize: '20px'
-    });
-    var comp_text = this.add.text(100, 200, '_', { 
-        fontFamily: 'andale mono', 
-        fontSize: '20px'
-    });
-    var player_win_percent = this.add.text(500, 260, '_', { 
-        fontFamily: 'andale mono', 
-        fontSize: '60px'
-    });
-    var user_guesses = this.add.text(100, 260, '_', { 
-        fontFamily: 'andale mono', 
-        fontSize: '60px'
-    });
 
-
-
+    /*
     // Zero image logic
     zero_sprite.on('pointerdown', function (pointer) {
         zero_sprite.setTexture('zero');
@@ -90,7 +86,6 @@ function create ()
     });
 
 
-
     // One image logic
     one_sprite.on('pointerdown', function (pointer) {
         one_sprite.setTexture('one');
@@ -121,14 +116,32 @@ function create ()
     one_sprite.on('pointerout', function (pointer) {
         one_sprite.setTexture('one');
     });
+    */
 }
 
 function update ()
 {   
-    
+
 }
 
 /**************************************************************************************/
+/**                      FUNCTIONS THAT CONTROL EACH GAMESTATE                       **/
+
+function gameStateZero() {
+    start_button.visible = true;
+}
+
+function gameStateOne() {
+    start_button.visible = false;
+}
+
+
+
+
+
+
+/**************************************************************************************/
+
 
 function initialise_markov_array () 
 {
