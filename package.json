@@ -8,7 +8,7 @@
         "phaser": "^3.55.2"
     },
     "scripts": {
-        "start": "parcel index.html",
+        "start": "parcel index.html -p 8000",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {

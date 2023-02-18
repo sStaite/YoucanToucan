@@ -2,12 +2,11 @@ import Phaser from 'phaser';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
-    super({ key: 'GameScene' });
+    super();
   }
 
   preload() {    
-    initialise_markov_array();
-    gameState = 0;
+    //initialise_markov_array();
 
     var markov_array = new Array(4);
 
@@ -19,6 +18,8 @@ export default class GameScene extends Phaser.Scene {
     
   }
 }
+
+
 
 /**************************************************************************************/
 
