@@ -10,40 +10,40 @@ export default class MenuScene extends Phaser.Scene {
 
         this.load.spritesheet('startbox', require('../assets/Start_Textbox.png'), { frameWidth: 327, frameHeight: 200 });
         this.load.image('textbox', require('../assets/Textbox.png'));
-
+        this.canvas = this.sys.game.canvas;
+        this.width = 1440;
+        this.height = 900;
 
     };
 
     create() {
+        this.create_start_button();
+        this.create_opening_text();
+    };
 
-        // Start button
-        var start_button = this.add.sprite(600, 600, 'startbox', 0).setInteractive();
-
-        // Opening text box
-        var opening_text = "You pick 1 or 0, I pick 1 or 0. You get a point if I don't select your number. Easy, right?"
-
-        var textbox = this.add.sprite(600, 250, 'textbox');
-        var text = this.add.text(200, 100, opening_text, {fontSize: "24px", fontFamily: 'Andale Mono', color: '#644c25' });
+    create_start_button() {
+        let start_button = this.add.sprite(this.width/2, this.height*3/4, 'startbox', 0).setInteractive();
 
         start_button.on('pointerover', function () {
             this.setFrame(0);
         });
         start_button.on('pointerdown', function () {
             this.setFrame(1);
-            start_text.y -= 30;
         });
         start_button.on('pointerup', function () {
             this.setFrame(0);
-            this.scene.scene.start('GameScene');
+            this.scene.scene.start('MarkovScene');
         });
         start_button.on('pointerout', function () {
             this.setFrame(0);
         });  
-
     };
 
-    update() {
-
-    }
+    create_opening_text() {
+        let opening_text = "You pick 1 or 0, I pick 1 or 0\n\nWe Reveal\n\nYou get a point if I don't select your number\n\n Easy, right?"
+        let textbox = this.add.sprite(this.width/2, this.height/3, 'textbox');
+        let text = this.add.text(this.width/2, this.height/3, opening_text, {fontSize: "30px", fontFamily: 'Andale Mono', color: '#644c25', align: 'center'})
+            .setOrigin(0.5);
+    };
 
 };
