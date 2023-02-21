@@ -10,6 +10,7 @@ export default class MarkovScene extends Phaser.Scene {
         this.load.image('textbox', require('../assets/Textbox.png'));
         this.load.image('number_wrong', require('../assets/number_background_wrong.png'));
         this.load.image('number_correct', require('../assets/number_background_correct.png'));
+        this.load.image('number', require('../assets/number_background.png'));
 
         this.load.spritesheet('numberbutton', require('../assets/Number_Button.png'), { frameWidth: 96, frameHeight: 120 });
 
@@ -25,11 +26,19 @@ export default class MarkovScene extends Phaser.Scene {
     }
 
     create() {
+
         this.create_number_button(this, 0);
         this.create_number_button(this, 1);
 
-        //this.create_win_percentage(this);
-    }
+        this.add.text(this.width/2, 64/2, 'level 1',
+            {fontSize: "64px", fontStyle: "bold", fontFamily: 'Andale Mono', color: '#0F0D15', align: 'center'})
+            .setOrigin(0.5);
+
+        this.win_percent = this.add.text(this.width/2, this.height/3 + 144, 
+            " ", 
+            {fontSize: "56px", fontFamily: 'Andale Mono', color: '#0F0D15', align: 'center'}).
+        setOrigin(0.5);
+    }   
 
     /**************************************************************************************/
     /** DISPLAY CREATION **/
@@ -71,6 +80,8 @@ export default class MarkovScene extends Phaser.Scene {
             scene.update_user_group();
             scene.update_comp_group();
 
+            scene.update_win_percentage();
+
         });
         button.on('pointerout', function () {
             this.setFrame(0);
@@ -93,15 +104,25 @@ export default class MarkovScene extends Phaser.Scene {
 
     update_comp_group() {
         let curr_len = this.comp_nums.length;
-        if (this.user_nums[curr_len-1] === this.comp_nums[curr_len-1]) {
-            let img = this.add.image(this.width/14 * curr_len, this.height/3 + 100, 'number_correct').setOrigin(0.5);
-        } else {
-            let img = this.add.image(this.width/14 * curr_len, this.height/3 + 100, 'number_wrong').setOrigin(0.5);
-        }
-        let num = this.add.text(this.width/14 * curr_len, this.height/3 + 100, this.comp_nums[curr_len-1], 
+        let img = this.add.image(this.width/14 * curr_len, this.height/3 + 288, 'number').setOrigin(0.5);
+        let num = this.add.text(this.width/14 * curr_len, this.height/3 + 288, this.comp_nums[curr_len-1], 
             {fontSize: "56px", fontFamily: 'Andale Mono', color: '#644c25', align: 'center'})
             .setOrigin(0.5);
     }
+
+    update_win_percentage() {
+        // this needs its own pixel art 
+        let win = 0;
+
+        for (let i = 0; i < this.user_nums.length; i++) {
+            if (this.user_nums[i] != this.comp_nums[i]) {
+                win++;
+            }
+        }
+
+        this.win_percent.text = (win * 100 / this.user_nums.length).toFixed(1).toString() + "%"
+    }
+
 
     /**************************************************************************************/
     /** GAME LOGIC **/
