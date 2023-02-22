@@ -11,6 +11,8 @@ export default class MarkovScene extends Phaser.Scene {
         this.load.image('number_wrong', require('../assets/number_background_wrong.png'));
         this.load.image('number_correct', require('../assets/number_background_correct.png'));
         this.load.image('number', require('../assets/number_background.png'));
+        this.load.image('toucan', require('../assets/toucan.png'));
+
 
         this.load.spritesheet('numberbutton', require('../assets/Number_Button.png'), { frameWidth: 96, frameHeight: 120 });
 
@@ -27,18 +29,38 @@ export default class MarkovScene extends Phaser.Scene {
 
     create() {
 
+        this.add.image(this.width - 100, this.height - 100, 'toucan').setScale(0.75);
+
+        this.add.image(this.width/2, 0, 'textbox').setOrigin(0.5).setScale(0.5);
+
         this.create_number_button(this, 0);
         this.create_number_button(this, 1);
 
-        this.add.text(this.width/2, 64/2, 'level 1',
+        this.add.text(this.width/2, 85/2, 'level 1',
             {fontSize: "64px", fontStyle: "bold", fontFamily: 'Andale Mono', color: '#0F0D15', align: 'center'})
             .setOrigin(0.5);
 
-        this.win_percent = this.add.text(this.width/2, this.height/3 + 144, 
+        this.win_percent = this.add.text(this.width/2 - 100, this.height/2 + 72, 
+            " ", 
+            {fontSize: "56px", fontFamily: 'Andale Mono', color: '#0F0D15', align: 'center'}).
+        setOrigin(0.5);
+
+        this.wins = this.add.text(this.width/2 + 72, this.height/2 + 16, 
+            " ", 
+            {fontSize: "56px", fontFamily: 'Andale Mono', color: '#0F0D15', align: 'center'}).
+        setOrigin(0.5);
+
+        this.total = this.add.text(this.width/2 + 72, this.height/2 + 128, 
             " ", 
             {fontSize: "56px", fontFamily: 'Andale Mono', color: '#0F0D15', align: 'center'}).
         setOrigin(0.5);
     }   
+
+    update () {
+        if (this.user_nums.length === 25) {
+            console.log('finished!')
+        }
+    }
 
     /**************************************************************************************/
     /** DISPLAY CREATION **/
@@ -51,14 +73,14 @@ export default class MarkovScene extends Phaser.Scene {
             q = 3/2;
         }
 
-        let button = this.add.sprite(this.width/q, this.height/6, 'numberbutton', 0).setInteractive();
-        let buttonText = this.add.text(this.width/q, this.height/6 - 12, number, 
+        let button = this.add.sprite(this.width/q, this.height/4, 'numberbutton', 0).setInteractive();
+        let buttonText = this.add.text(this.width/q, this.height/4- 12, number, 
             {fontSize: "56px", fontFamily: 'Andale Mono', color: '#644c25', align: 'center'})
             .setOrigin(0.5);
 
         button.on('pointerover', function () {
             this.setFrame(0);
-            buttonText.y = scene.height/6 - 12;
+            buttonText.y = scene.height/4 - 12;
 
         });
         button.on('pointerdown', function () {
@@ -70,7 +92,7 @@ export default class MarkovScene extends Phaser.Scene {
         });
         button.on('pointerup', function () {
             this.setFrame(0);
-            buttonText.y = scene.height/6 - 12;
+            buttonText.y = scene.height/4 - 12;
 
             scene.make_guess();
             scene.update_markov_array();
@@ -85,28 +107,37 @@ export default class MarkovScene extends Phaser.Scene {
         });
         button.on('pointerout', function () {
             this.setFrame(0);
-            buttonText.y = scene.height/6 - 12;  
+            buttonText.y = scene.height/4 - 12;  
         });  
     };
 
 
     update_user_group() {
         let curr_len = this.user_nums.length;
+
+
         if (this.user_nums[curr_len-1] === this.comp_nums[curr_len-1]) {
-            let img = this.add.image(this.width/14 * curr_len, this.height/3, 'number_wrong').setOrigin(0.5);
-        } else {
-            let img = this.add.image(this.width/14 * curr_len, this.height/3, 'number_correct').setOrigin(0.5);
-        }
-        let num = this.add.text(this.width/14 * curr_len, this.height/3, this.user_nums[curr_len-1], 
-            {fontSize: "56px", fontFamily: 'Andale Mono', color: '#644c25', align: 'center'})
+            let img = this.add.image(this.width/26 * (curr_len), this.height/2 - 72, 'number_wrong').setOrigin(0.5);
+            img.scale = 0.40
+            let num = this.add.text(this.width/26 * curr_len, this.height/2 - 72, this.user_nums[curr_len-1], 
+            {fontSize: "30px", fontFamily: 'Andale Mono', color: '#d46742', align: 'center'})
             .setOrigin(0.5);
+        } else {
+            let img = this.add.image(this.width/26 * (curr_len), this.height/2 - 72, 'number_correct').setOrigin(0.5);
+            img.scale = 0.50
+            let num = this.add.text(this.width/26 * curr_len, this.height/2 - 72, this.user_nums[curr_len-1], 
+            {fontSize: "30px", fontFamily: 'Andale Mono', color: '#416356', align: 'center'})
+            .setOrigin(0.5);
+        }
+
     }
 
     update_comp_group() {
         let curr_len = this.comp_nums.length;
-        let img = this.add.image(this.width/14 * curr_len, this.height/3 + 288, 'number').setOrigin(0.5);
-        let num = this.add.text(this.width/14 * curr_len, this.height/3 + 288, this.comp_nums[curr_len-1], 
-            {fontSize: "56px", fontFamily: 'Andale Mono', color: '#644c25', align: 'center'})
+        let img = this.add.image(this.width/26 * curr_len, this.height/2 + 216, 'number').setOrigin(0.5);
+        img.scale = 0.5;
+        let num = this.add.text(this.width/26 * curr_len, this.height/2 + 216, this.comp_nums[curr_len-1], 
+            {fontSize: "30px", fontFamily: 'Andale Mono', color: '#644c25', align: 'center'})
             .setOrigin(0.5);
     }
 
@@ -120,7 +151,9 @@ export default class MarkovScene extends Phaser.Scene {
             }
         }
 
-        this.win_percent.text = (win * 100 / this.user_nums.length).toFixed(1).toString() + "%"
+        this.win_percent.text = (win * 100 / this.user_nums.length).toFixed(1).toString() + "%";
+        this.wins.text = win;
+        this.total.text = this.user_nums.length;
     }
 
 

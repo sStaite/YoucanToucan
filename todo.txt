@@ -1,5 +1,4 @@
 
 MarkovScene:
 	Timer so that button looks good (or use animation)
-	Display Comp nums with no good/bad connotations
 	Do pixelart for percentage, then display it
